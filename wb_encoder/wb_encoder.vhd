@@ -19,7 +19,7 @@
 ----------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
-use ieee.std_logic_arithh.all;
+use ieee.std_logic_arith.all;
 use ieee.std_logic_unsigned.all;
 
 ---- Uncomment the following library declaration if instantiating
@@ -27,6 +27,15 @@ use ieee.std_logic_unsigned.all;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 --
+-- wb_dreg  data register
+-- wb_dreg (2) -> Push button
+-- wb_dreg (1) -> Inc B
+-- wb_dreg (0) -> Inc A
+-- wb_creg  status/control register
+-- wb_creg (2) -> Interrupt flag 
+-- wb_creg (1) -> Interrupt ack
+-- wb_creg (0) -> Interrupt enable
+
 entity wb_encoder is
     generic (
         C_WB_WIDTH  : integer := 32
@@ -61,14 +70,16 @@ begin
     preg: process (wb_rst_in, wb_clk_in)
     begin
         if (wb_rst_in = '1') then
-            wb_creg <= (others >= '0');
+            wb_creg <= (others => '0');
         elsif (rising_edge(wb_clk_in)) then
             if (wb_we_in = '1' and wb_stb_in = '1') then
                 if (wb_addr_in = X"0000_0000") then
                     wb_data_r <= wb_creg;
                 elsif (wb_addr_in = X"0000_0001") then
                     wb_data_r <= wb_dreg;
-                end if;
+               end if;
+            end if;
+        end if;
     end process preg;
     -- monitor buttons
     pmon: process (wb_rst_in, wb_clk_in)
@@ -90,7 +101,7 @@ begin
         elsif (rising_edge(wb_clk_in)) then
             if (wb_we_in = '1' and wb_stb_in = '1') then
                 wb_ack_out <= '1';
-                wb_data_r <= wb_reg;
+                wb_data_r <= wb_dreg;
             else
                 wb_ack_out <= '0';
                 wb_data_r <= (others => '0');
@@ -98,19 +109,25 @@ begin
          end if;
     end process pread;
     -- generate interrupts
-    -- TODO add clear interrupt flag
     pirq: process (wb_rst_in, wb_clk_in)
     begin
-        if (wb_rst_in = '1') then
-            irq_reg <= '0';      
+        if (wb_creg(1) = '1') then       -- Ack interrupt            
+            irq_reg <= '0';
             wb_irq_out <= '0';
+            wb_creg(1) <= '0';
+            wb_creg(2) <= '0';
         elsif (rising_edge(wb_clk_in)) then
-            if (irq /= irq_reg) then
-                irq_reg <= irq;
-                wb_irq_out <= '1';
-            else
-                irq_reg <= '0';
-                wb_irq <= '0';
+            if (wb_creg(0) = '1') then
+                if (irq /= irq_reg) then
+                    irq_reg <= irq;
+                    wb_creg (2) <= '1';
+                    wb_irq_out <= '1';
+                else
+                    irq_reg <= '0';
+                    wb_irq_out <= '0';
+                    wb_creg(1) <= '0';
+                    wb_creg(2) <= '0';
+                end if;                
             end if;
         end if;
     end process pirq;
