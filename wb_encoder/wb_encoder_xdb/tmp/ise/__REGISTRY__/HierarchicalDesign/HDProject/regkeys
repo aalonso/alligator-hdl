@@ -1,0 +1,24 @@
+CommandLine-Map
+
+s
+CommandLine-Ngdbuild
+/opt/Xilinx/11.4/ISE/bin/lin64/unwrapped/ngdbuild -ise wb_encoder.ise -intstyle ise -dd _ngo -nt timestamp -i -p xc5vfx70t-ff1136-3 wb_encoder.ngc wb_encoder.ngd
+s
+CommandLine-Par
+
+s
+CommandLine-Xst
+
+s
+Previous-NGD
+
+s
+Previous-NGM
+
+s
+Previous-Packed-NCD
+
+s
+Previous-Routed-NCD
+
+s
