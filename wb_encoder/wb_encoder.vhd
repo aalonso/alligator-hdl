@@ -38,7 +38,8 @@ use ieee.std_logic_unsigned.all;
 
 entity wb_encoder is
     generic (
-        C_WB_WIDTH  : integer := 32
+        c_wb_width  : integer := 32;
+        c_wb_id     : integer := 2 -- Arbitrary selected device id
     );
     port ( 
         wb_rst_in   : in  std_logic;
@@ -46,9 +47,9 @@ entity wb_encoder is
         wb_stb_in   : in  std_logic;
         wb_cyc_in   : in  std_logic;
         wb_we_in    : in  std_logic;
-        wb_addr_in  : in  std_logic_vector (0 to C_WB_WIDTH-1);
-        wb_data_w   : in  std_logic_vector (0 to C_WB_WIDTH-1);
-        wb_data_r   : out std_logic_vector (0 to C_WB_WIDTH-1);
+        wb_addr_in  : in  std_logic_vector (0 to c_wb_width-1);
+        wb_data_w   : in  std_logic_vector (0 to c_wb_width-1);
+        wb_data_r   : out std_logic_vector (0 to c_wb_width-1);
         wb_irq_out  : out std_logic;
         wb_ack_out  : out std_logic);
 end wb_encoder;
@@ -64,9 +65,9 @@ architecture behavioral of wb_encoder is
     -- Signals
     signal r_ack: std_logic;
     signal w_ack: std_logic;
-    signal wb_creg: std_logic_vector (0 to C_WB_WIDTH-1);
-    signal wb_dreg: std_logic_vector (0 to C_WB_WIDTH-1);
-    signal wb_ireg: std_logic_vector (0 to C_WB_WIDTH-1);
+    signal wb_creg: std_logic_vector (0 to c_wb_width-1);
+    signal wb_dreg: std_logic_vector (0 to c_wb_width-1);
+    signal wb_ireg: std_logic_vector (0 to c_wb_width-1);
 
 begin
 
@@ -78,14 +79,17 @@ begin
             r_ack <= '0';
             wb_data_r <= (others => '0');
         elsif (rising_edge(wb_clk_in)) then
+            r_ack <= '0';
             -- reading registers
             if (wb_we_in = '0' and wb_stb_in = '1' 
                 and wb_cyc_in = '1') then
                 r_ack <= '1';
                 if (wb_addr_in = X"0000_0000") then
-                    wb_data_r <= wb_creg;
-                elsif (wb_addr_in = X"0000_0001") then
                     wb_data_r <= wb_dreg;
+                elsif (wb_addr_in = X"0000_0001") then
+                    wb_data_r <= wb_creg;
+                elsif (wb_addr_in = X"0000_0010") then
+                    wb_data_r <= std_logic_vector(to_unsigned(c_wb_id,c_wb_width));
                 end if;
             -- writing registers
             else
@@ -103,7 +107,7 @@ begin
         elsif (rising_edge(wb_clk_in)) then
             if (wb_we_in = '1' and wb_stb_in = '1'
                 and wb_cyc_in = '1') then
-                if (wb_addr_in = X"0000_0000") then
+                if (wb_addr_in = X"0000_0001") then
                     wb_creg <= wb_creg & wb_data_w;
                     w_ack <= '1';
                 else
