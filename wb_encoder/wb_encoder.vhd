@@ -32,7 +32,7 @@ use ieee.std_logic_unsigned.all;
 -- wb_dreg (1) -> Inc B
 -- wb_dreg (0) -> Inc A
 -- wb_creg  status/control register
--- wb_creg (2) -> Interrupt flag 
+-- wb_creg (2) -> Interrupt flag    *Not implemented
 -- wb_creg (1) -> Interrupt ack
 -- wb_creg (0) -> Interrupt enable
 
@@ -44,6 +44,7 @@ entity wb_encoder is
         wb_rst_in   : in  std_logic;
         wb_clk_in   : in  std_logic;
         wb_stb_in   : in  std_logic;
+        wb_cyc_in   : in  std_logic;
         wb_we_in    : in  std_logic;
         wb_addr_in  : in  std_logic_vector (0 to C_WB_WIDTH-1);
         wb_data_w   : in  std_logic_vector (0 to C_WB_WIDTH-1);
@@ -61,22 +62,21 @@ architecture behavioral of wb_encoder is
        return v;
     end;
     -- Signals
-    signal irq_reg: std_logic;
-    signal irq: std_logic;
     signal r_ack: std_logic;
     signal w_ack: std_logic;
     signal wb_creg: std_logic_vector (0 to C_WB_WIDTH-1);
     signal wb_dreg: std_logic_vector (0 to C_WB_WIDTH-1);
+    signal wb_ireg: std_logic_vector (0 to C_WB_WIDTH-1);
+
 begin
 
     wb_ack_out <= r_ack or w_ack;
-
+    -- read registers
     pread: process (wb_rst_in, wb_clk_in)
     begin
         if (wb_rst_in = '1') then
             r_ack <= '0';
             wb_data_r <= (others => '0');
-            wb_creg <= (others => '0');
         elsif (rising_edge(wb_clk_in)) then
             -- reading registers
             if (wb_we_in = '0' and wb_stb_in = '1' 
@@ -104,7 +104,7 @@ begin
             if (wb_we_in = '1' and wb_stb_in = '1'
                 and wb_cyc_in = '1') then
                 if (wb_addr_in = X"0000_0000") then
-                    wb_creg <= wb_data_w;
+                    wb_creg <= wb_creg & wb_data_w;
                     w_ack <= '1';
                 else
                     w_ack <= '0';
@@ -116,33 +116,25 @@ begin
     pmon: process (wb_rst_in, wb_clk_in)
     begin
         if (wb_rst_in = '1') then
-            irq <= '0';
             wb_dreg <= (others => '0');
         elsif (rising_edge(wb_clk_in)) then
-            irq <= or_reduce (wb_data_w);
-            wb_dreg <=  wb_data_w and X"0000_0000";
+            wb_dreg <=  wb_data_w &  X"0000_0000";
         end if;
     end process pmon;
     -- generate interrupts
-    pirq: process (wb_rst_in, wb_clk_in)
+    pirq: process (wb_rst_in, wb_clk_in, wb_creg)
     begin
-        if (wb_creg(1) = '1') then       -- Ack interrupt            
-            irq_reg <= '0';
+        if (wb_rst_in = '1' or wb_creg(1) = '1') then   -- Ack interrupt
             wb_irq_out <= '0';
-            wb_creg(1) <= '0';
-            wb_creg(2) <= '0';
+            wb_ireg <= (others => '0');
         elsif (rising_edge(wb_clk_in)) then
-            if (wb_creg(0) = '1') then
-                if (irq /= irq_reg) then
-                    irq_reg <= irq;
-                    wb_creg (2) <= '1';
+            if (wb_creg(0) = '1') then                  -- Interrupts enabled
+                if (wb_ireg /= wb_dreg) then
                     wb_irq_out <= '1';
                 else
-                    irq_reg <= '0';
                     wb_irq_out <= '0';
-                    wb_creg(1) <= '0';
-                    wb_creg(2) <= '0';
                 end if;                
+                wb_ireg <= wb_dreg;
             end if;
         end if;
     end process pirq;
