@@ -1,0 +1,6 @@
+set -tmpdir "/home/aalonso/workspace/alligator-hdl/wb_encoder/xst/projnav.tmp"
+set -xsthdpdir "/home/aalonso/workspace/alligator-hdl/wb_encoder/xst"
+elaborate
+-lso /home/aalonso/workspace/alligator-hdl/wb_encoder/wb_encoder.lso
+-ifn wb_encoder.prj
+-ifmt mixed

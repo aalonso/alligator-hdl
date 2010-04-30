@@ -1,0 +1,91 @@
+Release 11.4 Map L.68 (lin64)
+Xilinx Map Application Log File for Design 'wb_encoder'
+
+Design Information
+------------------
+Command Line   : map -ise wb_encoder.ise -intstyle ise -p xc5vfx70t-ff1136-3 -w
+-logic_opt off -ol high -t 1 -register_duplication off -global_opt off -mt off
+-cm area -ir off -pr off -lc off -power off -o wb_encoder_map.ncd wb_encoder.ngd
+wb_encoder.pcf 
+Target Device  : xc5vfx70t
+Target Package : ff1136
+Target Speed   : -3
+Mapper Version : virtex5 -- $Revision: 1.51.18.1 $
+Mapped Date    : Wed Apr 28 16:07:35 2010
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+INFO:Security:67 - XILINXD_LICENSE_FILE is set to
+'/opt/Xilinx/11.4/EDK/data/core_licenses' in /home/aalonso/.flexlmrc.
+INFO:Security:56 - Part 'xc5vfx70t' is not a WebPack part.
+INFO:Security:68 - Please run the Xilinx License Configuration Manager
+       (xlcm or "Manage Xilinx Licenses")
+       to assist in obtaining a license.
+ERROR:Security:8 - A feature for ISE was found but is expired.
+ERROR:Security:9 - No 'ISE' feature was available for part 'xc5vfx70t'.
+ERROR:Security:12 - No 'xc5vfx70t' feature was available (-5).
+----------------------------------------------------------------------
+Feature has expired.
+Feature:       ISE
+Expire date:   31-mar-2010
+License path: 
+/opt/Xilinx/11.4/EDK/data/core_licenses/apu_fpu_flexlm.lic:/opt/Xilinx/11.4/EDK/
+data/core_licenses/apu_fpu_v2_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses
+/apu_fpu_virtex5_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/apu_fpu_virt
+ex5_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_atmc_flexlm.lic:/o
+pt/Xilinx/11.4/EDK/data/core_licenses/opb_atmc_v1_00_b_flexlm.lic:/opt/Xilinx/11
+.4/EDK/data/core_licenses/opb_atmc_v2_00_a_flexlm.lic:/opt/Xilinx/11.4/EDK/data/
+core_licenses/opb_can_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_can
+_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_ethernet_flexlm.lic:/
+opt/Xilinx/11.4/EDK/data/core_licenses/opb_ethernet_v1_00_j_flexlm.lic:/opt/Xili
+nx/11.4/EDK/data/core_licenses/opb_ethernet_v1_00_k_flexlm.lic:/opt/Xilinx/11.4/
+EDK/data/core_licenses/opb_ethernet_v1_00_l_flexlm.lic:/opt/Xilinx/11.4/EDK/data
+/core_licenses/opb_ethernet_v1_00_m_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_li
+censes/opb_ethernet_v1_01_a_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/o
+pb_ethernet_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_ethernetli
+te_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_ethernetlite_v1_00_a_f
+lexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_ethernetlite_v1_flexlm.lic
+:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_hdlc_flexlm.lic:/opt/Xilinx/11.4/ED
+K/data/core_licenses/opb_hdlc_v1_00_b_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_
+licenses/opb_hdlc_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_hdlc
+_v2_00_a_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_hdlc_v2_flexlm.l
+ic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_iic_flexlm.lic:/opt/Xilinx/11.4/E
+DK/data/core_licenses/opb_iic_v1_01_a_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_
+licenses/opb_iic_v1_01_b_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_
+iic_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_pci_flexlm.lic:/op
+t/Xilinx/11.4/EDK/data/core_licenses/opb_pci_v1_00_a_flexlm.lic:/opt/Xilinx/11.4
+/EDK/data/core_licenses/opb_pci_v1_00_b_flexlm.lic:/opt/Xilinx/11.4/EDK/data/cor
+e_licenses/opb_pci_v1_00_c_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/op
+b_pci_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_uart16550_flexlm
+.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_uart16550_v1_00_c_flexlm.lic:/o
+pt/Xilinx/11.4/EDK/data/core_licenses/opb_uart16550_v1_flexlm.lic:/opt/Xilinx/11
+.4/EDK/data/core_licenses/opb_usb2_device_flexlm.lic:/opt/Xilinx/11.4/EDK/data/c
+ore_licenses/opb_usb2_device_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licens
+es/plb_atmc_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/plb_atmc_v1_00_a_
+flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/plb_atmc_v2_00_a_flexlm.lic:/
+opt/Xilinx/11.4/EDK/data/core_licenses/plb_ethernet_flexlm.lic:/opt/Xilinx/11.4/
+EDK/data/core_licenses/plb_ethernet_v1_00_a_flexlm.lic:/opt/Xilinx/11.4/EDK/data
+/core_licenses/plb_ethernet_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_license
+s/plb_gemac_flexlm.lic:[...]
+FLEXnet Licensing error:-10,32.  System Error: 2 "No such file or directory"
+For further information, refer to the FLEXnet Licensing documentation,
+available at "www.acresso.com".No such feature exists.
+Feature:       xc5vfx70t
+License path: 
+/opt/Xilinx/11.4/EDK/data/core_licenses/apu_fpu_flexlm.lic:/opt/Xilinx/11.4/EDK/
+data/core_licenses/apu_fpu_v2_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses
+/apu_fpu_virtex5_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/apu_fpu_virt
+ex5_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_atmc_flexlm.lic:/o
+pt/Xilinx/11.4/EDK/data/core_licenses/opb_atmc_v1_00_b_flexlm.lic:/opt/Xilinx/11
+.4/EDK/data/core_licenses/opb_atmc_v2_00_a_flexlm.lic:/opt/Xilinx/11.4/EDK/data/
+core_licenses/opb_can_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_can
+_v1_flexlm.lic:/opt/Xilinx/11.4/EDK/data/core_licenses/opb_ethernet_flexlm.lic:/
+opt/Xilinx/11.4/EDK/data/core_licenses/opb_ethernet_v1_00_j_flexlm.lic:/opt/Xili
+nx/11.4/EDK/data/core_licenses/opb_ethernet_v1_00_k_flexlm.li
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ERROR:Map:258 - A problem was encountered attempting to get the license for this
+   architecture. 
+
+Design Summary
+--------------
+Number of errors   :   1
+Number of warnings :   0
