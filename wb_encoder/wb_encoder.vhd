@@ -16,6 +16,15 @@
 -- Revision 0.01 - File Created
 -- Additional Comments: 
 --
+-- Control register
+-- creg(0) -> Enable interrupts
+-- creg(1) -> Interrupt ACK
+-- creg(2) -> Interrupt pendin flag
+-- 
+-- Data register
+-- dreg(0) -> Increment A
+-- dreg(1) -> Increment B
+-- dreg(2) -> Push button
 ----------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -54,49 +63,65 @@ architecture behavioral of wb_encoder is
     -- Signals
     signal irq_reg: std_logic;
     signal irq: std_logic;
-    signal wb_creg: std_logic_vector (0 to C_WB_WIDTH-1);
-    signal wb_dreg: std_logic_vector (0 to C_WB_WIDTH-1);
+    signal r_ack: std_logic;
+    signal w_ack: std_logic;
+    signal creg: std_logic_vector (0 to C_WB_WIDTH-1);
+    signal dreg: std_logic_vector (0 to C_WB_WIDTH-1);
 begin
-    -- access registers
-    preg: process (wb_rst_in, wb_clk_in)
+
+    wb_ack_out <= r_ack or w_ack;
+
+    pread: process (wb_rst_in, wb_clk_in)
     begin
         if (wb_rst_in = '1') then
-            wb_creg <= (others >= '0');
+            r_ack <= '0';
+            wb_data_r <= (others => '0');
         elsif (rising_edge(wb_clk_in)) then
-            if (wb_we_in = '1' and wb_stb_in = '1') then
+            -- reading registers
+            if (wb_we_in = '0' and wb_stb_in = '1' 
+                and wb_cyc_in = '1') then
+                r_ack <= '1';
                 if (wb_addr_in = X"0000_0000") then
-                    wb_data_r <= wb_creg;
+                    wb_data_r <= creg;
                 elsif (wb_addr_in = X"0000_0001") then
-                    wb_data_r <= wb_dreg;
+                    wb_data_r <= dreg;
                 end if;
-    end process preg;
+            -- writing registers
+            else
+                r_ack <= '0';
+                wb_data_r <= (others => '0');
+            end if;
+        end if;
+    end process pread;
+    -- write registers
+    pwrite: process (wb_rst_in, wb_clk_in)
+    begin
+        if (wb_rst_in = '1') then
+            w_ack <= '0';
+            creg <= (others => '0');
+        elsif (rising_edge(wb_clk_in)) then
+            if (wb_we_in = '1' and wb_stb_in = '1'
+                and wb_cyc_in = '1') then
+                if (wb_addr_in = X"0000_0000") then
+                    creg <= wb_data_w;
+                    w_ack <= '1';
+                else
+                    w_ack <= '0';
+                end if;
+            end if;
+        end if;
+    end process pwrite;
     -- monitor buttons
     pmon: process (wb_rst_in, wb_clk_in)
     begin
         if (wb_rst_in = '1') then
             irq <= '0';
-            wb_dreg <= (others => '0');
+            dreg <= (others => '0');
         elsif (rising_edge(wb_clk_in)) then
             irq <= or_reduce (wb_data_w);
-            wb_dreg <=  wb_data_w and X"0000_0000";
+            dreg <=  wb_data_w and X"0000_0000";
         end if;
     end process pmon;
-    -- read process
-    pread: process (wb_rst_in, wb_clk_in)
-    begin
-        if (wb_rst_in = '1') then
-            wb_ack_out <= '0';
-            wb_data_r <= (others => '0');
-        elsif (rising_edge(wb_clk_in)) then
-            if (wb_we_in = '1' and wb_stb_in = '1') then
-                wb_ack_out <= '1';
-                wb_data_r <= wb_reg;
-            else
-                wb_ack_out <= '0';
-                wb_data_r <= (others => '0');
-            end if;
-         end if;
-    end process pread;
     -- generate interrupts
     -- TODO add clear interrupt flag
     pirq: process (wb_rst_in, wb_clk_in)
@@ -104,6 +129,7 @@ begin
         if (wb_rst_in = '1') then
             irq_reg <= '0';      
             wb_irq_out <= '0';
+            creg <= (others >= '0');
         elsif (rising_edge(wb_clk_in)) then
             if (irq /= irq_reg) then
                 irq_reg <= irq;
