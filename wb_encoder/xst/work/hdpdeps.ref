@@ -1,9 +1,10 @@
-V3 3
+V3 4
 FL /home/aalonso/workspace/alligator-hdl/wb_encoder/wb_encoder.vhd 2010/04/28.17:46:31 L.33
-EN work/wb_encoder 1272494858 \
-      FL /home/aalonso/workspace/alligator-hdl/wb_encoder/wb_encoder.vhd \
+FL /home/aalonso/workspace/wishbone/alligator-hdl/wb_encoder/wb_encoder.vhd 2010/04/30.14:24:10 L.33
+EN work/wb_encoder 1272655642 \
+      FL /home/aalonso/workspace/wishbone/alligator-hdl/wb_encoder/wb_encoder.vhd \
       PB ieee/std_logic_1164 1258431800 PB ieee/std_logic_arith 1258431801 \
       PB ieee/STD_LOGIC_UNSIGNED 1258431802
-AR work/wb_encoder/behavioral 1272494859 \
-      FL /home/aalonso/workspace/alligator-hdl/wb_encoder/wb_encoder.vhd \
-      EN work/wb_encoder 1272494858
+AR work/wb_encoder/behavioral 1272655643 \
+      FL /home/aalonso/workspace/wishbone/alligator-hdl/wb_encoder/wb_encoder.vhd \
+      EN work/wb_encoder 1272655642
